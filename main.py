@@ -36,7 +36,7 @@ def ingestar_datos():
         
         print(f"Lote {i // tamaño_lote + 1} subido con éxito.")
 
-    print("¡Ingesta completada! Tus datos ya están en Supabase.")
+    print("Datos subidos en Supabase.")
 
 if __name__ == "__main__":
     ingestar_datos()

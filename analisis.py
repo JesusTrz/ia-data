@@ -34,7 +34,6 @@ def analizar_y_graficar():
     print("Generando ventana interactiva con 3 gráficas...")
     eje_x = resumen['mes_anio'].dt.to_timestamp()
     
-    # Crear un lienzo grande
     fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(12, 14))
 
     # --- GRÁFICA 1: TENDENCIAS ---
@@ -43,7 +42,6 @@ def analizar_y_graficar():
     ax1.set_ylabel('Personas Detenidas')
     ax1.grid(True, linestyle='--', alpha=0.6)
     
-    # Etiqueta de Totales Gráfica 1
     texto_ax1 = f"Promedio Global: {promedio_global:,.0f} personas"
     ax1.text(0.02, 0.85, texto_ax1, transform=ax1.transAxes, fontsize=11,
              bbox=dict(facecolor='white', alpha=0.9, edgecolor='gray', boxstyle='round,pad=0.5'))
@@ -56,7 +54,6 @@ def analizar_y_graficar():
     ax2.legend(loc='upper right')
     ax2.grid(True, linestyle='--', alpha=0.6)
 
-    # Etiqueta de Totales Gráfica 2
     texto_ax2 = f"TOTAL HISTÓRICO INGRESOS: {gran_total_ingresos:,.0f}\nTOTAL HISTÓRICO SALIDAS: {gran_total_salidas:,.0f}"
     ax2.text(0.02, 0.80, texto_ax2, transform=ax2.transAxes, fontsize=11,
              bbox=dict(facecolor='white', alpha=0.9, edgecolor='gray', boxstyle='round,pad=0.5'))
@@ -77,23 +74,19 @@ def analizar_y_graficar():
     ax3.legend(loc='upper right')
     ax3.grid(True, linestyle='--', alpha=0.6)
 
-    # Etiqueta de Totales Gráfica 3
     prediccion_final = p(x_futuro[-1])
     texto_ax3 = f"Población total esperada\nen 6 meses: {prediccion_final:,.0f} personas"
     ax3.text(0.02, 0.80, texto_ax3, transform=ax3.transAxes, fontsize=11,
              bbox=dict(facecolor='#fff3e0', alpha=0.9, edgecolor='orange', boxstyle='round,pad=0.5'))
 
-    # Mostrar
     plt.tight_layout()
     plt.show()
 
-    # ==========================================
-    # Análisis con IA
-    # ==========================================
+    #Analisis Api Chat GPT
     resumen['mes_anio'] = resumen['mes_anio'].astype(str)
     datos_texto = resumen.to_csv(index=False)
     
-    print("Enviando datos a la API de ChatGPT para el análisis cualitativo...")
+    print("Enviando datos a IA...")
     
     prompt_sistema = """
     Eres un analista de datos experto en políticas migratorias de EE. UU. 
@@ -107,7 +100,7 @@ def analizar_y_graficar():
     """
 
     respuesta = client.chat.completions.create(
-        model="gpt-4o-mini", 
+        model="gpt-4o-mini", #Usamos un modelo más pequeño para análisis de datos, ya que no necesitamos generación de texto extensa
         messages=[
             {"role": "system", "content": prompt_sistema},
             {"role": "user", "content": f"Aquí están los datos:\n\n{datos_texto}"}
